@@ -1,0 +1,51 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# To learn more about the skaffold.yaml schema visit
+# https://skaffold.dev/docs/references/yaml/
+apiVersion: skaffold/v3alpha1
+kind: Config
+build:
+  tagPolicy:
+    sha256: {}
+  artifacts:
+  - image: score-app
+    context: ./
+  - image: test-image
+    context: ./test-image
+profiles:
+- name: dev
+  manifests:
+    kustomize:
+      paths:
+      - kubernetes-manifests/dev/
+  verify:
+  - name: verify-integration-test
+    container:
+      name: verify-integration-test
+      image: test-image
+      command: ["/bin/sh"]
+      args: ["-c", "res=$(curl -X POST -d '{\"instances\":[{\"V1\": -0.356, \"V2\": 0.725, \"V3\": 1.972, \"V4\": 0.831, \"V5\": 0.37, \"V6\": -0.108, \"V7\": 0.752, \"V8\": -0.12, \"V9\": -0.421, \"V10\": -0.06, \"V11\": -0.508, \"V12\": 0.426, \"V13\": 0.414, \"V14\": -0.698, \"V15\": -1.465, \"V16\": -0.119, \"V17\": -0.145, \"V18\": -1.332, \"V19\": -1.547, \"V20\": -0.134, \"V21\": 0.021, \"V22\": 0.424, \"V23\": -0.016, \"V24\": 0.467, \"V25\": -0.81, \"V26\": 0.657, \"V27\": -0.043, \"V28\": -0.046, \"Amount\": 0.0}]}' -H \"Content-Type: application/json; charset=utf-8\" http://ENDPOINT_DEV:7080/predict | jq -r .predictions[]); if test \"$res\" == \"0\"; then echo \"Integration test correctly completed\"; exit 0; else echo \"Integration test failed!\"; exit 1; fi"]
+- name: prod
+  manifests:
+    kustomize:
+      paths:
+      - kubernetes-manifests/prod/
+  verify:
+  - name: verify-endpoint
+    container:
+      name: verify-integration-test
+      image: test-image
+      command: ["/bin/sh"]
+      args: ["-c", "res=$(curl -X GET http://ENDPOINT_PROD:7080/health | jq -r .status); if test \"$res\" == \"healthy\"; then echo \"Endpoint is healthy\"; exit 0; else echo \"Endpoint test failed\"; exit 1; fi"]
