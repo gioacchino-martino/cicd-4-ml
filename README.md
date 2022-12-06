@@ -1,14 +1,7 @@
-# New Project Template
+# Abstract
 
-This repository contains a template that can be used to seed a repository for a
-new Google open source project.
+Imagine you are part of a Data science team and the IT department is the owner of self-managed K8s serving infrastructure. In order to deploy a model properly, you need a workflow that once the model is ready, it would test, build and release it into a staging and production environment. Here is where CI/CD practices come into play.
 
-See [go/releasing](http://go/releasing) (available externally at
-https://opensource.google/docs/releasing/) for more information about
-releasing a new Google open source project.
-
-This template uses the Apache license, as is Google's default.  See the
-documentation for instructions on using alternate license.
 
 ## How to use this template
 
