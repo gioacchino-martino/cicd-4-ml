@@ -182,6 +182,35 @@ curl "https://containeranalysis.googleapis.com/v1/projects/${PROJECT_ID}/notes/v
 EOF
 ```
 
+```shell
+gcloud container binauthz attestors create "vulnz-attestor" \
+  --project "${PROJECT_ID}" \
+  --attestation-authority-note-project "${PROJECT_ID}" \
+  --attestation-authority-note "vulnz-note" \
+  --description "Vulnerability scan attestor"
+
+gcloud beta container binauthz attestors public-keys add \
+  --project "${PROJECT_ID}" \
+  --attestor "vulnz-attestor" \
+  --keyversion "1" \
+  --keyversion-key "vulnz-signer" \
+  --keyversion-keyring "binauthz" \
+  --keyversion-location "${REGION}" \
+  --keyversion-project "${PROJECT_ID}"
+
+gcloud container binauthz attestors add-iam-policy-binding "vulnz-attestor" \
+  --project "${PROJECT_ID}" \
+  --member "serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
+  --role "roles/binaryauthorization.attestorsViewer"
+
+gcloud kms keys add-iam-policy-binding "vulnz-signer" \
+  --project "${PROJECT_ID}" \
+  --location "${REGION}" \
+  --keyring "binauthz" \
+  --member "serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
+  --role 'roles/cloudkms.signerVerifier'
+```
+
 #### 11. Setup Binary Auth Policy
 ```shell
 cat > ./binauthz-policy.yaml <<EOF
