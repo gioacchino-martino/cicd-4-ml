@@ -60,8 +60,8 @@ gcloud projects add-iam-policy-binding --member="serviceAccount:${PROJECT_NUMBER
 gcloud projects add-iam-policy-binding --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" --role roles/container.admin $(gcloud config get-value project)
 ```
 
-#### 4. Policies
-They are required for os login and restrict vpc peering
+#### 4. Network
+VPC and Subnets setup
 
 ```shell
 gcloud compute networks create $VPC --project="$PROJECT_ID" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional 
