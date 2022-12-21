@@ -80,7 +80,7 @@ gcloud beta container --project "$PROJECT_ID" clusters create "$GKE_CLUSTER_NAME
 Enable BinAuth with an update
 
 ```shell
-gcloud container clusters update "$GKE_CLUSTER_NAME-prod" --enable-binauthz
+gcloud container clusters update "$GKE_CLUSTER_NAME-prod" --enable-binauthz --region $REGION
 ```
 
 To deploy the development cluster
@@ -92,7 +92,7 @@ gcloud beta container --project "$PROJECT_ID" clusters create "$GKE_CLUSTER_NAME
 Enable BinAuth with an update
 
 ```shell
-gcloud container clusters update "$GKE_CLUSTER_NAME-dev" --enable-binauthz
+gcloud container clusters update "$GKE_CLUSTER_NAME-dev" --enable-binauthz --region $REGION
 ```
 
 #### 6. Setup Cloud Artifact
