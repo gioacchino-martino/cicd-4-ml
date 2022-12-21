@@ -46,6 +46,7 @@ DEV_SVC_SUBNET=gke-dev-int-svc
 DEV_SVC_SUBNET_CIDR="10.200.0.0/24"
 DEV_MASTER_IPV4_CIDR="172.16.2.0/28"
 GKE_CLUSTER_NAME=gke-bel
+DOCKER_REPO=images4ml
 ```
 #### 3. IAM setup
 Configure Cloud Build to allow modification of Cloud Deploy delivery pipelines and deploy to GKE:
