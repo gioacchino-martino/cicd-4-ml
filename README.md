@@ -240,7 +240,18 @@ gcloud container binauthz policy import ./binauthz-policy.yaml \
   --project "${PROJECT_ID}"
 ```
 
-#### 12. Trigger creation
+#### 12. Cloud Build Trigger
+
+Clone this repo
+
+```shell
+sss
+```
+
+Connect you Repository and Configure the Cloud Build Pipeline
+
+
+Create a Cloud Bucket event Trigger
 
 ```shell
 gcloud pubsub topics create ml-model-update	
