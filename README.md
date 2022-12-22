@@ -240,7 +240,7 @@ gcloud container binauthz policy import ./binauthz-policy.yaml \
   --project "${PROJECT_ID}"
 ```
 
-#### 12. Cloud Build Trigger
+#### 12. Clone the Repo
 
 Clone this repo
 
@@ -248,18 +248,42 @@ Clone this repo
 sss
 ```
 
-Connect you Repository and Configure the Cloud Build Pipeline
-
-![imgaes](./buildtrigger.png)
-
-
-Create a Cloud Bucket event Trigger
+#### 13. Create a Pub/Sub Topic and Cloud Bucket notification. This is useful to create a Cloud Build Trigger
 
 ```shell
 gcloud pubsub topics create ml-model-update	
 
 gcloud storage buckets notifications create gs://"${PROJECT_ID}-model"--topic=projects/${PROJECT_ID}/topics/ml-model-update --event-types=OBJECT_FINALIZE
 ```
+
+#### 14. Connect you Repository and Configure the Cloud Build Pipeline
+
+Create cicd pipeline with a Pub/Sub Trigger
+![images](./cloud-build-step1.png)
+
+and Connect your Repository
+![images](./cloud-build-step2.png)
+
+pay attention in configuring environment variables and replace with your values
+![images](./cloud-build-step3.png)
+
+```shell
+_BUCKET_ID = $(body.message.attributes.bucketId)
+_ENDPOINT_DEV = x.x.x.x
+_ENDPOINT_PROD = y.y.y.y
+_EVENT_TYPE = $(body.message.attributes.eventType)
+_KMS_KEYRING = binauthz
+_KMS_LOCATION = europe-west1
+_OBJECT_ID = $(body.message.attributes.objectId)
+_REPO_DOCKER = images4ml
+_VULNZ_ATTESTOR = vulnz-attestor
+_VULNZ_KMS_KEY = vulnz-signer
+_VULNZ_KMS_KEY_VERSION = 1
+```
+
+and a filter on bucket events
+![images](./cloud-build-step4.png)
+
 
 ## Copyrights
 
