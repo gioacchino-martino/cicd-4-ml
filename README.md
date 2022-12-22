@@ -250,6 +250,8 @@ sss
 
 Connect you Repository and Configure the Cloud Build Pipeline
 
+![imgaes](./buildtrigger.png)
+
 
 Create a Cloud Bucket event Trigger
 
