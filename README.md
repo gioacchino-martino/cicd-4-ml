@@ -30,7 +30,8 @@ gcloud services enable aiplatform.googleapis.com\
 PROJECT_ID=$(gcloud config get-value project)
 PROJECT_NUMBER=$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
 REGION=europe-west1
-VPC=gke-internal
+LOCATION=europe-west1-b
+VPC=cicd-internal
 PROD_SUBNET=gke-prd-int
 PROD_SUBNET_CIDR="10.0.0.0/22" 
 PROD_POD_SUBNET=gke-prd-int-pod
@@ -45,6 +46,8 @@ DEV_POD_SUBNET_CIDR="10.20.0.0/22"
 DEV_SVC_SUBNET=gke-dev-int-svc
 DEV_SVC_SUBNET_CIDR="10.200.0.0/24"
 DEV_MASTER_IPV4_CIDR="172.16.2.0/28"
+NOTEBOOK_SUBNET=notebooks
+NOTEBOOK_SUBNET_CIDR="10.2.0.0/22" 
 GKE_CLUSTER_NAME=gke-bel
 DOCKER_REPO=images4ml
 ```
@@ -66,8 +69,13 @@ VPC and Subnets setup
 
 ```shell
 gcloud compute networks create $VPC --project="$PROJECT_ID" --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional 
+
 gcloud compute networks subnets create $PROD_SUBNET --project="$PROJECT_ID" --range="$PROD_SUBNET_CIDR" --network=$VPC --region=$REGION --secondary-range=$PROD_POD_SUBNET="$PROD_POD_SUBNET_CIDR",$PROD_SVC_SUBNET=$PROD_SVC_SUBNET_CIDR --enable-private-ip-google-access
+
 gcloud compute networks subnets create $DEV_SUBNET --project="$PROJECT_ID" --range="$DEV_SUBNET_CIDR" --network=$VPC --region=$REGION --secondary-range=$DEV_POD_SUBNET="$DEV_POD_SUBNET_CIDR",$DEV_SVC_SUBNET=$DEV_SVC_SUBNET_CIDR --enable-private-ip-google-access
+
+gcloud compute networks subnets create $NOTEBOOK_SUBNET --project="$PROJECT_ID" --range="$NOTEBOOK_SUBNET_CIDR" --network=$VPC --region=$REGION --enable-private-ip-google-access
+
 ```
 
 #### 5. GKE Setup
@@ -284,6 +292,16 @@ _VULNZ_KMS_KEY_VERSION = 1
 and a filter on bucket events
 ![Screenshot](./images/cloud-build-step4.png)
 
+#### 15. Deploy your Notebook and start working on your Model!
+
+```shell
+gcloud beta notebooks instances create "${PROJECT_ID}-notebook" \
+     --vm-image-project=deeplearning-platform-release \
+     --vm-image-family=common-cpu-notebooks \
+     --machine-type=e2-standard-8 \
+     --location="${LOCATION}" \
+     --subnet="projects/${PROJECT_ID}/regions/${REGION}/subnetworks/${NOTEBOOK_SUBNET}" \
+```
 
 ## Copyrights
 
