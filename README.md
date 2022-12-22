@@ -259,13 +259,13 @@ gcloud storage buckets notifications create gs://"${PROJECT_ID}-model"--topic=pr
 #### 14. Connect you Repository and Configure the Cloud Build Pipeline
 
 Create cicd pipeline with a Pub/Sub Trigger
-![images](./cloud-build-step1.png)
+![Screenshot](./images/cloud-build-step1.png)
 
 and Connect your Repository
-![images](./cloud-build-step2.png)
+![Screenshot](./images/cloud-build-step2.png)
 
 pay attention in configuring environment variables and replace with your values
-![images](./cloud-build-step3.png)
+![Screenshot](./images/cloud-build-step3.png)
 
 ```shell
 _BUCKET_ID = $(body.message.attributes.bucketId)
@@ -282,7 +282,7 @@ _VULNZ_KMS_KEY_VERSION = 1
 ```
 
 and a filter on bucket events
-![images](./cloud-build-step4.png)
+![Screenshot](./images/cloud-build-step4.png)
 
 
 ## Copyrights
