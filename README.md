@@ -253,7 +253,7 @@ gcloud container binauthz policy import ./binauthz-policy.yaml \
 Clone this repo
 
 ```shell
-sss
+git clone <your_repo>
 ```
 
 #### 13. Create a Pub/Sub Topic and Cloud Bucket notification. This is useful to create a Cloud Build Trigger
@@ -292,7 +292,7 @@ _VULNZ_KMS_KEY_VERSION = 1
 and a filter on bucket events
 ![Screenshot](./images/cloud-build-step4.png)
 
-#### 15. Deploy your Notebook and start working on your Model!
+#### 15. Deploy your Notebook
 
 ```shell
 gcloud beta notebooks instances create "${PROJECT_ID}-notebook" \
@@ -301,6 +301,12 @@ gcloud beta notebooks instances create "${PROJECT_ID}-notebook" \
      --machine-type=e2-standard-8 \
      --location="${LOCATION}" \
      --subnet="projects/${PROJECT_ID}/regions/${REGION}/subnetworks/${NOTEBOOK_SUBNET}" \
+```
+
+#### 16. Open your Notebook, clone the repo and start working on your Model!
+
+```shell
+git clone <your_repo>
 ```
 
 ## Copyrights
